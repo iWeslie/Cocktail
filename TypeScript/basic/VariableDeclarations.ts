@@ -53,6 +53,25 @@ function sumMartix(martix: number[][]) {
     return sum
 }
 
+function sumMartix2(martix: number[][]) {
+    var sum = 0
+    // using let in the loop will be ok 
+    for (let i = 0; i < martix.length; i++) {
+        var currentRow = martix[i]
+        // This version of the loop will actually perform the summation correctly 
+        // because the inner loop’s i shadows i from the outer loop.
+        for (let i = 0; i< currentRow.length; i++) {
+            sum += currentRow[i]
+        }
+    }
+    return sum
+}
+
+var martix: number[][] = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+console.log(martix)
+console.log("sumMartix(martix) -> " + sumMartix(martix))
+console.log("sumMartix2(martix) -> " + sumMartix2(martix))
+
 for (var i = 0; i < 10; i++) {
     // setTimeout will try to execute a function after a certain number of milliseconds
     // Every function expression we pass to setTimeout actually refers to the same i from the same scope.
@@ -110,3 +129,153 @@ catch (e) {
 }
 // Error: 'e' doesn't exist here
 // console.log(e)
+
+// illegal to use 'a' before it's declared;
+// a++ 
+// let a
+
+function foo() {
+    // okay to capture a
+    return a1
+} 
+// illegal call 'foo' before 'a1' is decleared 
+// runtime should throw an error here 
+foo()
+
+let a1
+
+// Re-declarations and Shadowing
+// With var declarations, we mentioned that it didn’t matter
+// how many times you declared your variables; you just got one.
+function f5() {
+    var x
+    var x
+    if (true) {
+        var x
+    }
+}
+
+// function g() {
+//     let x = 100;
+//     var x = 100; // error: can't have both declarations of 'x'
+// }
+
+function f6(condition, x) {
+    if (condition) {
+        let x = 100
+        return x
+    }
+    return x
+}
+
+console.log("f6(false, 0) -> " + f6(false, 0))
+console.log("f6(true, 0) -> " + f6(true, 0))
+
+// Block-scoped variable capturing
+function theCityThatAlwaysSleeps() {
+    let getCity
+
+    if (true) {
+        let city = "Seattle"
+        getCity = function() {
+            return city
+        }
+    }
+    // Because we’ve captured city from within its environment,
+    // we’re still able to access it despite the fact that the if block finished executing.
+    return getCity()
+}
+
+// let declarations have drastically different behavior when declared as part of a loop
+// these declarations sort of create a new scope per iteration
+
+// for(let i = 0; i < 10; i++) {
+//     setTimeout(function() { console.log(i) }, 100 * i)
+// } 
+
+// const declarations
+// const declarations are another way of declaring variables.
+const numLivesForCat = 9
+// their value cannot be changed once they are bound
+const kitty = {
+    name: "Aurora",
+    numLives: numLivesForCat
+}
+
+// Error
+// Cannot assign to 'kitty' because it is a constant or a read-only property.
+// kitty = {
+//     name : "Danielle"
+//     numLivesForCat: numLivesForCat
+// }
+
+// all okay
+kitty.name = "Rory"
+kitty.name = "Kitty"
+kitty.name = "Cat"
+kitty.numLives--
+
+// let vs. const
+// 1. All declarations other than those you plan to modify should use `const`
+// 2. Using const also makes code more predictable when reasoning about flow of data.
+
+// Destructuring
+let input = [1, 2]
+let [first, second] = input
+console.log("first -> " + first)
+console.log("second -> " + second)
+
+// first = input[0]
+// second = input[1]
+
+// swap variables
+// [first, second] = [second, first]
+
+function f7([first, second]: [number, number]) {
+    console.log("f7 first -> " + first)
+    console.log("f7 second -> " + second)
+}
+
+f7([1, 2])
+
+// You can create a variable for the remaining items in a list using the syntax ...
+let [first1, ...rest] = [1, 2, 3, 4]
+console.log("first1: " + first1)
+console.log("rest: " + rest)
+
+// you can just ignore trailing elements you don’t care about
+let [first2] = [1, 2, 3, 4]
+console.log("first2: " + first2)
+
+// let [, second1, , forth1] = [1, 2, 3, 4]
+
+// Object destructuring
+let o = {
+    a2: "foo",
+    b: 12,
+    c: "bar"
+};
+// Notice that you can skip c if you don’t need it.
+// let { a, b } = o
+
+// Like array destructuring, you can have assignment without declaration:
+// ({ a, b } = { a: "baz", b: 101 })
+
+let { a2, ...passthrough } = o
+let total = passthrough.b + passthrough.c.length
+
+// Property renaming
+// You can also give different names to properties:
+
+let o3 = {
+    a3: "foo",
+    b3: 12,
+    c3: "bar"
+}
+// You can also give different names to properties:
+let { a3: newName1, b3: newName2 } = o3
+// You can read a: newName1 as “a as newName1”.
+// The direction is left-to-right, as if you had written:
+// let newName2 = o3.b3
+// let newName1 = o3.a3
+
