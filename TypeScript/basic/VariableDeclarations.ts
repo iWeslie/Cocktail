@@ -279,3 +279,50 @@ let { a3: newName1, b3: newName2 } = o3
 // let newName2 = o3.b3
 // let newName1 = o3.a3
 
+// default values 
+function keepWholeObject(wholeObject: { a: string, b?: number }) {
+    let { a, b = 1001 } = wholeObject
+}
+
+// function declarations 
+type C = { a: string, b?: number }
+function f8({ a, b }: C): void {
+    // ...
+}
+
+function f9({ a, b } = { a: "", b: 0 }): void {
+    // ...
+}
+f9() // ok, default to { a: "", b: 0 }
+
+function f10({ a, b = 0 } = { a: "" }): void {
+    // ...
+}
+f10({ a: "yes" }) // ok, defautl b = 0
+f10() // ok, default to { a: "" }, which then defaults b = 0
+// f10({}) // error, 'a' is required if you supply an argument
+
+// spread 
+// The spread operator is the opposite of destructuring. 
+// It allows you to spread an array into another array, or an object into another object. 
+let first3 = [1, 2]
+let second3 = [3, 4]
+let bothPlus = [0, ...first3, ...second3, 5]
+console.log("bothPlus: " + bothPlus)
+
+let defaults1 = { food: "spicy", price: "$$", ambiance: "noisy" }
+let search = { ...defaults1, food: "rich" }
+console.log("search: " + search.food + " " + search.price + " " + search.ambiance)
+
+class C1 {
+    p = 12
+    m() {
+
+    }
+}
+
+let c = new C1()
+let clone = { ...c }
+console.log("clone.p:" + clone.p)
+// clone.m() // error  Property 'm' does not exist on type '{ p: number; }'.
+ 
