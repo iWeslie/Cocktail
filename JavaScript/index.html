@@ -1,0 +1,58 @@
+< !DOCTYPE html>
+    <html lang="en" dir="ltr">
+
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript">
+            console.log(1234);
+            console.log(location.pathname);
+            document.write("12345")
+
+            function newDoc() {
+                window.location.assign("http://www.iweslie.com")
+            }
+
+            function goBack() {
+                window.history.back()
+            }
+
+            function goForwad() {
+                window.history.forward()
+            }
+
+            function timedMsg() {
+                var t = setTimeout("alert('5 seconds!')", 1000)
+            }
+        </script>
+        <title>This is a title</title>
+    </head>
+
+    <body>
+
+        <input type="button" name="my blog" value="click to visit" onclick="newDoc()">
+        <input type="button" value="Back" onclick="goBack()">
+        <input type="button" name="" value="Forward" onclick="goForwad()">
+        <input type="button" name="" value="display timed alertbox" onclick="timedMsg">
+        <div id="example"></div>
+        <div id="example"></div>
+
+
+        <script>
+            // alert("text to alert")
+            // confirm("confirm text")
+            // prompt("text prompt", "default value")
+            txt = "<p>Browser CodeName: " + navigator.appCodeName + "</p>";
+            txt += "<p>Browser Name: " + navigator.appName + "</p>";
+            txt += "<p>Browser Version: " + navigator.appVersion + "</p>";
+            txt += "<p>Cookies Enabled: " + navigator.cookieEnabled + "</p>";
+            txt += "<p>Platform: " + navigator.platform + "</p>";
+            txt += "<p>User-agent header: " + navigator.userAgent + "</p>";
+            txt += "<p>User-agent language: " + navigator.systemLanguage + "</p>";
+
+            document.getElementById("example").innerHTML = txt;
+
+
+        </script>
+    </body>
+
+    </html>
