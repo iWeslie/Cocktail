@@ -1,6 +1,9 @@
 import React, { Component} from 'react';
 import { StyleSheet, Text, View, TextInput, AppRegistry, Image, FlatList } from 'react-native';
+// const { Map } = require('immutable');
+// import Immutable, { Map } from 'immutable';
 
+//
 const styles = StyleSheet.create({
     bigblue: {
         color: 'blue',
@@ -26,7 +29,14 @@ const liststyles = StyleSheet.create({
 
 
 class Greetings extends Component {
+    // const map1 = Map({ a: 1, b: 2, c: 3 });
+    // const map2 = map1.set('b', 50);
+    // const res  map1.get('b') + " vs. " + map2.get('b'); // 2 vs. 50
+    //
+
+
     render() {
+
         return (
             <View style={{alignItems: 'center'}}>
                 <Text>
@@ -124,7 +134,7 @@ export default class App extends Component {
                         {this.state.text.split(' ').map((word) => word && '🍕').join(' ')}
                     </Text>
                 </View>
-                
+
                 <View style={liststyles.container}>
                     <FlatList
                         data={[
