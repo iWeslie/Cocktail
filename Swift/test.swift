@@ -1,1 +1,4 @@
-print("Hello world")
+func test() {
+    print("Hello world!")
+}
+test()

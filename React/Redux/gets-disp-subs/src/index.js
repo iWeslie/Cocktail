@@ -37,6 +37,7 @@ const createStore = (reducer) => {
     return { getState, dispatch, subscribe };
 }
 
+// create a store
 const store = createStore(counter)
 //
 const Counter = ({ value, onIncrement, onDecrement }) => (
