@@ -1,0 +1,7 @@
+USE Music;
+ALTER TABLE Albums
+ADD CONSTRAINT FK_Albums_Genres FOREIGN KEY (GenreId)
+    REFERENCES dbo.Genres (GenreId)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+;
