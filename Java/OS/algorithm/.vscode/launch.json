@@ -1,0 +1,34 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - t",
+            "request": "launch",
+            "mainClass": "t"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FIFOmethod",
+            "request": "launch",
+            "mainClass": "FIFOmethod"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Main",
+            "request": "launch",
+            "mainClass": "Main"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - RandomList",
+            "request": "launch",
+            "mainClass": "algorithm.RandomList"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FIFO",
+            "request": "launch",
+            "mainClass": "algorithm.FIFO"
+        }
+    ]
+}

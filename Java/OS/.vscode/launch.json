@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FIFO",
+            "request": "launch",
+            "mainClass": "algorithm.FIFO",
+            "projectName": "OS_48bf8c49"
+        }
+    ]
+}
