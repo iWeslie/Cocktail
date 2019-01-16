@@ -293,3 +293,111 @@ DELETE FROM Student
 WHERE Sno='23456789'
 
 DELETE FROM SC
+
+
+-- grant access
+GRANT SELECT ON TABLE Student TO U1;
+-- allow target user spread access
+GRANT SELECT ON TABLE Student TO U1 WITH GRANT OPTION;
+
+GRANT ALL PRIVILEGES
+ON TABLE Student, Course
+TO U2, U3;
+
+-- to all user
+GRANT SELECT ON TABLE SC TO PUBLIC;
+
+GRANT UPDATE(Sno), SELECT ON TABLE Student TO U4;
+
+-- revoke
+REVOKE UPDATE(Sno) ON TABLE Student FROM U4;
+-- cascade <-> WITH GRANT OPTION
+REVOKE INSERT ON TABLE SC FROM U5 CASCADE;
+
+-- connect/resource/dba
+
+CREATE ROLE R1
+GRANT SELECT, UPDATE, INSERT ON TABLE Student TO R1
+
+GRANT R1 TO user1, user2, user3
+REVOKE R1 FROM user4
+
+
+AUDIT ALTER, TABLE ON SC
+NOAUDIT ALTER, UPDATE ON SC
+
+CREATE TABLE Student
+(
+    Sno CHAR(9) UNIQUE NOT NULL,
+    Ssex CHAR(2) CHECK (Ssex IN ('男','女')),
+    Grade SMALLINT CHECK(Grade>=0 AND Grade<=100),
+    PRIMARY KEY (Sno, Cno),
+    FOREIGN KEY (Sno) REFERENCES Student(Sno),
+    CHECK (Ssex='女' OR Sname NOT LIKE 'Ms.%'),
+    CONSTRAINT C1 CHECK (Sno BETWEEN 90000 AND 99999),
+    CONSTRAINT C2 NOT NULL,
+    CONSTRAINT StuKey PRIMARY KEY(Sno)
+)
+
+ALTER TABLE Student
+DROP CONSTRAINT C1
+
+CREATE ASSERTION ASSE_SC_DE_NUM
+CHECK (60>=(
+    SELECT COUNT(*) FROM Course, SC
+    WHERE SC.Cno=Course.Cno AND Course.Cname='DB'
+))
+
+ALTER TABLE SC ADD TERM DATE
+CREATE ASSERTION ASSE_SC_CNUM2
+CHECK(60>=(
+    SELECT COUNT(*) FROM SC
+    GROUP BY Cno, TERM
+))
+
+-- trigger
+-- add a record when score increased
+CREATE TABLE SC_T
+AFTER UPDATE OF Grade ON SC
+REFERENCING
+    OLD ROW AS OldTuple,
+    NEW ROW AS NewTuple
+FOR EACH ROW
+WHEN (NewTuple.Grade>=1.1IS8OldTuple.Grade)
+    INSERT INTO SC_U(Sno, Cno, OldGrade, NewGrade)
+    VALUES(OldTuple.Sno, OldTuple.Cno, OldTuple.Grade, NewTuple.Grade)
+
+CREATE TRIGGER Student_Count
+AFTER INSERT ON Student
+REFERENCING
+    NEW TABLE AS DELTA
+FOR EACH STATEMENT
+    INSERT INTO StudentInsertLog(Numbers)
+    SELECT COUNT(*) FROM DELTA
+
+CREATE TRIGGER Insert_Or_Update_Sal
+BEFORE INNER OR UPDATE ON Teacher
+FOR EACH ROW
+BEGIN
+    IF (new.Job='professor') AND (new.Sal<4000)
+    THEN new.Sal:=4000;
+    END IF;
+END
+
+CREATE TRIGGER Staff_Trans
+AFTER INSERT ON Borrow
+FOR EACH ROW
+BEGIN
+    UPDATE Books
+    SET is_in_library='false'
+    FROM Books, Inserted
+    WHERE Books.no=Inserted.no
+    IF (SELECT allNum FROM Student WHERE Student.Sno=Inserted.no) = 0
+        RAISERROR ('can not borrow books')
+        ROLLBACK TRANSACTION
+        RETURN
+    ELSE
+    UPDATE Student
+    SET allNum=allNum-1
+    FROM Student, Inserted WHERE Student.Sno=Inserted.no
+    END
