@@ -3,7 +3,7 @@ if the_world_is_flat:
     print("Be careful not to fall of")
 
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python3
+
 
 # Calculator
 17 // 3  # floor division discards the fractional part
